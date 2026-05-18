@@ -27,18 +27,26 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const forwardedHost = request.headers.get("x-forwarded-host");
+  const forwardedProto = request.headers.get("x-forwarded-proto") ?? "https";
+
+  function buildRedirect(path: string) {
+    if (forwardedHost) {
+      return NextResponse.redirect(`${forwardedProto}://${forwardedHost}${path}`);
+    }
+    const url = request.nextUrl.clone();
+    url.pathname = path;
+    return NextResponse.redirect(url);
+  }
+
   // Protect /dashboard routes
   if (!user && request.nextUrl.pathname.startsWith("/dashboard")) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/login";
-    return NextResponse.redirect(url);
+    return buildRedirect("/login");
   }
 
   // Redirect logged-in users away from /login
   if (user && request.nextUrl.pathname === "/login") {
-    const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
-    return NextResponse.redirect(url);
+    return buildRedirect("/dashboard");
   }
 
   return supabaseResponse;
