@@ -1,0 +1,20 @@
+{
+  "name": "revid-final",
+  "private": true,
+  "workspaces": [
+    "web",
+    "worker"
+  ],
+  "scripts": {
+    "dev:web": "npm --workspace web run dev",
+    "build:web": "npm --workspace web run build",
+    "start:web": "npm --workspace web run start",
+    "lint:web": "npm --workspace web run lint",
+    "dev:worker": "npm --workspace worker run dev",
+    "build:worker": "npm --workspace worker run build",
+    "start:worker": "npm --workspace worker run start",
+    "migrate:worker": "npm --workspace worker run migrate"
+  }
+}
+
+

@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS worker_heartbeats (
+  id TEXT PRIMARY KEY DEFAULT 'singleton',
+  last_seen TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
